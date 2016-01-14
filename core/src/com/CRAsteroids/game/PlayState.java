@@ -111,4 +111,10 @@ public class PlayState extends GameState {
 		font.dispose();
 	}
 
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

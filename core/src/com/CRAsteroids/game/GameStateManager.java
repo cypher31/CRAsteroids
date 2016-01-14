@@ -38,5 +38,9 @@ public class GameStateManager {
 	public void draw(){
 		gameState.draw();
 	}
+	
+	public void resize(int width, int height){
+		gameState.resize(width, height);
+	}
 
 }

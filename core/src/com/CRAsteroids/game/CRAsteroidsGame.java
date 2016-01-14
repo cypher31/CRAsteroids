@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class CRAsteroidsGame implements ApplicationListener {
 	
@@ -13,6 +14,7 @@ public class CRAsteroidsGame implements ApplicationListener {
 	
 	//Camera perpendicular to game plane
 	public static OrthographicCamera cam;
+	public static StretchViewport viewport;
 	
 	private GameStateManager gsm;
 
@@ -48,6 +50,7 @@ public class CRAsteroidsGame implements ApplicationListener {
 
 	@Override
 	public void resize(int width, int height) {
+		gsm.resize(width, height);
 	}
 
 	@Override
@@ -56,9 +59,19 @@ public class CRAsteroidsGame implements ApplicationListener {
 		Gdx.gl20.glClearColor(0, 0, 0, 1);
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		//width of screen
+		WIDTH = Gdx.graphics.getWidth();
+		HEIGHT = Gdx.graphics.getHeight();
+				
+		//create camera
+		cam = new OrthographicCamera(WIDTH, HEIGHT);
+		//set camera position
+		cam.position.set(WIDTH / 2, HEIGHT /2, 0);
+		//updates camera
+		cam.update();
+		
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.draw();
-		
 		GameKeys.update();
 	}
 
