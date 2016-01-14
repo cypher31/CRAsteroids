@@ -6,7 +6,11 @@ import com.CRAsteroids.game.CRAsteroidsGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new CRAsteroidsGame(), config);
+		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+		cfg.title = "Title";
+		//cfg.useGL30 = true;
+		cfg.height = 600;
+		cfg.width = 600;
+		new LwjglApplication(new CRAsteroidsGame(), cfg);
 	}
 }
