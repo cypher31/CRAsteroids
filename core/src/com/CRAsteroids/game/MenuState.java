@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -99,6 +101,7 @@ public class MenuState extends GameState{
 
 		menuViewport = new FitViewport(CRAsteroidsGame.WIDTH, CRAsteroidsGame.HEIGHT);
 		stage = new Stage(menuViewport);
+		Gdx.input.setInputProcessor(stage);
 
 		Label.LabelStyle smallStyle = new Label.LabelStyle();
 		smallStyle.font = fontSmall;
@@ -132,6 +135,9 @@ public class MenuState extends GameState{
 		playButton = new TextButton("Play", textButtonStyle);
 		highScoreButton = new TextButton("Highscore", textButtonStyle);
 		quitButton = new TextButton("Quit", textButtonStyle);
+		
+		
+		
 		
 		//add actors
 		Table titleTable = new Table();
@@ -214,7 +220,7 @@ public class MenuState extends GameState{
 			asteroids.get(i).draw(sr);
 		}
 		
-		sb.begin();
+//		sb.begin();
 		
 //		//draw title
 		//float width = titleFont.getBounds(title).width;
@@ -230,7 +236,7 @@ public class MenuState extends GameState{
 //					CRAsteroidsGame.HEIGHT - (CRAsteroidsGame.HEIGHT / 1.5f + 35 * i));
 //		}
 		
-		sb.end();
+//		sb.end();
 		
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
@@ -239,40 +245,65 @@ public class MenuState extends GameState{
 	@Override
 	public void handleInput() {
 		
-		if(GameKeys.isPressed(GameKeys.UP)){
-			if(currentItem > 0){
-				currentItem--;
-			}
-		}
-		if(GameKeys.isPressed(GameKeys.DOWN)){
-			if(currentItem < menuItems.length - 1){
-				currentItem++;
-			}
-		}
-		if(GameKeys.isPressed(GameKeys.ENTER)){
-			select();
-		}
-	}
-	
-	private void select(){
-		//play
-		if(currentItem == 0){
+		//button click
+		playButton.addListener(new ChangeListener(){
+		@Override
+		public void changed(ChangeEvent event, Actor actor){
+			System.out.println("play pressed");
 			gsm.setState(GameStateManager.PLAY);
 		}
-		else if(currentItem == 1){
-			gsm.setState(GameStateManager.HIGHSCORE);
-		}
-		else if(currentItem == 2){
-			Gdx.app.exit();
-		}
+		});
+		
+		highScoreButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor){
+				System.out.println("highScore pressed");
+				gsm.setState(GameStateManager.HIGHSCORE);
+			}
+			});
+		
+		quitButton.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent event, Actor actor){
+				System.out.println("quit pressed");
+				Gdx.app.exit();
+			}
+			});
+		
+//		if(GameKeys.isPressed(GameKeys.UP)){
+//			if(currentItem > 0){
+//				currentItem--;
+//			}
+//		}
+//		if(GameKeys.isPressed(GameKeys.DOWN)){
+//			if(currentItem < menuItems.length - 1){
+//				currentItem++;
+//			}
+//		}
+//		if(GameKeys.isPressed(GameKeys.ENTER)){
+//			select();
+//		}
 	}
+	
+//	private void select(){
+//		//play
+//		if(currentItem == 0){
+//			gsm.setState(GameStateManager.PLAY);
+//		}
+//		else if(currentItem == 1){
+//			gsm.setState(GameStateManager.HIGHSCORE);
+//		}
+//		else if(currentItem == 2){
+//			Gdx.app.exit();
+//		}
+//	}
 
 	@Override
 	public void dispose() {
-		sb.dispose();
-		sr.dispose();
-		titleFont.dispose();
-		font.dispose();
+//		sb.dispose();
+//		sr.dispose();
+//		titleFont.dispose();
+//		font.dispose();
 	}
 
 	
