@@ -20,6 +20,10 @@ public class CRAsteroidsGame implements ApplicationListener {
 	public static OrthographicCamera cam;
 	public static StretchViewport viewport;
 	
+	public static int smallFontSize;
+	public static int mediumFontSize;
+	public static int largeFontSize;
+	
 	public static BitmapFont fontSmall;
 	public static BitmapFont fontMedium;
 	public static BitmapFont fontLarge;
@@ -47,12 +51,14 @@ public class CRAsteroidsGame implements ApplicationListener {
 		//sets input processor to this
 		Gdx.input.setInputProcessor(new GameInputProcessor());
 		
+		fontSize();
+		
 		//Generate font
 		SmartFontGenerator fontGen = new SmartFontGenerator();
 		FileHandle exoFile = Gdx.files.internal("fonts/Hyperspace Bold.ttf");
-		fontSmall = fontGen.createFont(exoFile, "exo-small", 20);
-		fontMedium = fontGen.createFont(exoFile, "exo-medium", 25);
-		fontLarge = fontGen.createFont(exoFile, "exo-large", 30);
+		fontSmall = fontGen.createFont(exoFile, "exo-small", 12);
+		fontMedium = fontGen.createFont(exoFile, "exo-medium", 20);
+		fontLarge = fontGen.createFont(exoFile, "exo-large", 45);
 
 		smallStyle = new Label.LabelStyle();
 		smallStyle.font = fontSmall;
@@ -99,6 +105,12 @@ public class CRAsteroidsGame implements ApplicationListener {
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.draw();
 		GameKeys.update();
+	}
+	
+	public void fontSize(){
+		smallFontSize = (int) (Gdx.graphics.getWidth() * .01f);
+		mediumFontSize = (int) (Gdx.graphics.getWidth() * .025f);
+		largeFontSize = (int) (Gdx.graphics.getWidth() * .030f);
 	}
 
 	@Override

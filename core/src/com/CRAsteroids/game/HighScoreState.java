@@ -1,6 +1,7 @@
 package com.CRAsteroids.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,15 +26,17 @@ public class HighScoreState extends GameState {
 		
 		sb = new SpriteBatch();
 		
-		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace bold.ttf"));
-		FreeTypeFontParameter genPar = new FreeTypeFontParameter();
+//		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace bold.ttf"));
+//		FreeTypeFontParameter genPar = new FreeTypeFontParameter();
+//		
+//		genPar.size = 45;
+//		genPar.magFilter = TextureFilter.Linear;
+//		genPar.minFilter = TextureFilter.Linear;
+//		
+//		font = gen.generateFont(genPar);
+//		gen.dispose();
 		
-		genPar.size = 20;
-		genPar.magFilter = TextureFilter.Linear;
-		genPar.minFilter = TextureFilter.Linear;
-		
-		font = gen.generateFont(genPar);
-		gen.dispose();
+		font = CRAsteroidsGame.fontLarge;
 		
 		Save.load();
 		highScores = Save.gd.getHighScores();
@@ -57,7 +60,7 @@ public class HighScoreState extends GameState {
 		
 		s = "High Scores";
 		w = font.getBounds(s).width;
-		font.draw(sb, s, (CRAsteroidsGame.WIDTH - w) / 2, 300);
+		font.draw(sb, s, (CRAsteroidsGame.WIDTH - w) / 2, 950);
 		
 		for(int i = 0; i < highScores.length; i++){
 			s = String.format(
@@ -67,7 +70,7 @@ public class HighScoreState extends GameState {
 						names[i]
 					);
 			w = font.getBounds(s).width;
-			font.draw(sb, s, (CRAsteroidsGame.WIDTH - w) / 2, 270 - 20 * i);
+			font.draw(sb, s, (CRAsteroidsGame.WIDTH - w) / 2, 800 - (font.getBounds(s).height + 20) * i);
 		}
 		
 		sb.end();
@@ -83,7 +86,7 @@ public class HighScoreState extends GameState {
 	@Override
 	public void dispose() {
 		sb.dispose();
-		font.dispose();
+//		font.dispose();
 	}
 
 	@Override

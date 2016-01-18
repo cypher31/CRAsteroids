@@ -27,14 +27,10 @@ public class MenuState extends GameState{
 	private SpriteBatch sb;
 	private ShapeRenderer sr;
 	private Viewport menuViewport;
-	
-	private float fontWidth;
-	private float fontHeight;
 	//Stage
 	private Stage stage;
 	//Font
 	//private BitmapFont titleFont;
-	private BitmapFont font;
 	private BitmapFont optionStyle;
 	private LabelStyle titleStyle;
 	//Buttons
@@ -68,76 +64,29 @@ public class MenuState extends GameState{
 		
 		currentScreenWidth = Gdx.graphics.getWidth();
 		currentScreenHeight = Gdx.graphics.getHeight();
-//		
-//		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace Bold.ttf"));
-//		FreeTypeFontParameter genPar = new FreeTypeFontParameter();
-//		//titleFont = gen.generateFont(10);
-//		
-//		genPar.size = 50 ; //font size 30
-//
-//		genPar.magFilter = TextureFilter.Nearest;
-//		genPar.minFilter = TextureFilter.Nearest;
-//		
-//		titleFont = gen.generateFont(genPar); // font size 12 pixels
-//		
-//		genPar.size = 12; // font size 12 pixels
-//
-//		genPar.magFilter = TextureFilter.Nearest;
-//		genPar.minFilter = TextureFilter.Nearest;
-//		
-//		font = gen.generateFont(genPar);
-//		
-//		gen.dispose(); 
-//		
-//		System.out.println(titleFont.getBounds(title).width);
-//		titleFont.setColor(255, 255, 255, 1);
-		
-		//Generate font
-//		SmartFontGenerator fontGen = new SmartFontGenerator();
-//		FileHandle exoFile = Gdx.files.internal("fonts/Hyperspace Bold.ttf");
-//		BitmapFont fontSmall = fontGen.createFont(exoFile, "exo-small", 20);
-//		BitmapFont fontMedium = fontGen.createFont(exoFile, "exo-medium", 25);
-//		BitmapFont fontLarge = fontGen.createFont(exoFile, "exo-large", 30);
-//
-//		Label.LabelStyle smallStyle = new Label.LabelStyle();
-//		smallStyle.font = fontSmall;
-//		Label.LabelStyle mediumStyle = new Label.LabelStyle();
-//		mediumStyle.font = fontMedium;
-//		Label.LabelStyle largeStyle = new Label.LabelStyle();
-//		largeStyle.font = fontLarge;
 		
 		menuViewport = new FitViewport(CRAsteroidsGame.WIDTH, CRAsteroidsGame.HEIGHT);
 		stage = new Stage(menuViewport);
 		Gdx.input.setInputProcessor(stage);
 
-		if(currentScreenWidth <=800){
-			titleStyle = CRAsteroidsGame.smallStyle;
-		}else if(currentScreenWidth >=800 && currentScreenWidth <= 1600){
-			titleStyle = CRAsteroidsGame.mediumStyle;
-		}else{
+		//come back and make if statement depending on screen size
+//			titleStyle = CRAsteroidsGame.smallStyle;
+//			titleStyle = CRAsteroidsGame.mediumStyle;
 			titleStyle = CRAsteroidsGame.largeStyle;
-		}
 		
 		Label titleName = new Label(title, titleStyle);
-//		Label playOption = new Label(play, smallStyle);
-//		Label highScoreOption = new Label(highScore, smallStyle);
-//		Label quitOption = new Label(quit, smallStyle);
 
 		//buttons
-		if(currentScreenWidth <=800){
-			optionStyle = CRAsteroidsGame.smallStyle.font;
-		}else{
-			optionStyle = CRAsteroidsGame.mediumStyle.font;
-		}
+		//come back and make if statement depending on screen size
+//		optionStyle = CRAsteroidsGame.smallStyle.font;
+		optionStyle = CRAsteroidsGame.mediumStyle.font;
 		
 		textButtonStyle = new TextButtonStyle();
 		textButtonStyle.font = optionStyle;
-		playButton = new TextButton("Play", textButtonStyle);
-		highScoreButton = new TextButton("Highscore", textButtonStyle);
-		quitButton = new TextButton("Quit", textButtonStyle);
 		
-		
-		
+		playButton = new TextButton(play, textButtonStyle);
+		highScoreButton = new TextButton(highScore, textButtonStyle);
+		quitButton = new TextButton(quit, textButtonStyle);
 		
 		//add actors
 		Table titleTable = new Table();
@@ -152,12 +101,6 @@ public class MenuState extends GameState{
 			//title 
 		titleTable.align(Align.top).padTop(currentScreenHeight * 0.1f);
 		titleTable.add(titleName).top();
-		
-//			//options
-//		optionsTable.align(Align.center);
-//		optionsTable.add(playOption).spaceBottom(10).row();
-//		optionsTable.add(highScoreOption).spaceBottom(10).row();
-//		optionsTable.add(quitOption).spaceBottom(10).row();
 
 			//buttons
 		optionsTable.add(playButton).align(Align.center).row();
@@ -170,13 +113,8 @@ public class MenuState extends GameState{
 		playButton.setDebug(true);
 		highScoreButton.setDebug(true);
 		quitButton.setDebug(true);
-//		
-//		menuItems = new String[]{
-//				"Play",
-//				"Highscores",
-//				"Quit"
-//		};
-		
+
+		//create asteroids
 		asteroids = new ArrayList<Asteroid>();
 		for(int i = 0; i < 6; i++){
 			asteroids.add(new Asteroid(MathUtils.random(CRAsteroidsGame.WIDTH), 
@@ -192,14 +130,6 @@ public class MenuState extends GameState{
 		
 		for(int i = 0; i < asteroids.size(); i++){
 			asteroids.get(i).update(dt);
-		}
-		
-		if(Gdx.graphics.getWidth() != currentScreenWidth || 
-				Gdx.graphics.getHeight() != currentScreenHeight){
-			System.out.println(stage.getWidth());
-			System.out.println(stage.getHeight());
-			Gdx.app.debug(TAG, "App restart");
-			init();
 		}
 		
 	}
@@ -219,24 +149,6 @@ public class MenuState extends GameState{
 		for(int i = 0; i < asteroids.size(); i++){
 			asteroids.get(i).draw(sr);
 		}
-		
-//		sb.begin();
-		
-//		//draw title
-		//float width = titleFont.getBounds(title).width;
-//		titleFont.draw(sb, title, (CRAsteroidsGame.WIDTH - width) / 2, 
-//				CRAsteroidsGame.HEIGHT - CRAsteroidsGame.HEIGHT / 3);
-		
-		//draw menu
-//		for(int i = 0; i < menuItems.length; i++){
-//			width = font.getBounds(menuItems[i]).width;
-//			if(currentItem == i) font.setColor(255, 0, 0, 1);
-//			else font.setColor(255, 255, 255, 1);
-//			font.draw(sb, menuItems[i], (CRAsteroidsGame.WIDTH - width) / 2,
-//					CRAsteroidsGame.HEIGHT - (CRAsteroidsGame.HEIGHT / 1.5f + 35 * i));
-//		}
-		
-//		sb.end();
 		
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
@@ -270,38 +182,11 @@ public class MenuState extends GameState{
 			}
 			});
 		
-//		if(GameKeys.isPressed(GameKeys.UP)){
-//			if(currentItem > 0){
-//				currentItem--;
-//			}
-//		}
-//		if(GameKeys.isPressed(GameKeys.DOWN)){
-//			if(currentItem < menuItems.length - 1){
-//				currentItem++;
-//			}
-//		}
-//		if(GameKeys.isPressed(GameKeys.ENTER)){
-//			select();
-//		}
 	}
-	
-//	private void select(){
-//		//play
-//		if(currentItem == 0){
-//			gsm.setState(GameStateManager.PLAY);
-//		}
-//		else if(currentItem == 1){
-//			gsm.setState(GameStateManager.HIGHSCORE);
-//		}
-//		else if(currentItem == 2){
-//			Gdx.app.exit();
-//		}
-//	}
 
 	@Override
 	public void dispose() {
-//		sb.dispose();
-//		sr.dispose();
+		sr.dispose();
 //		titleFont.dispose();
 //		font.dispose();
 	}
