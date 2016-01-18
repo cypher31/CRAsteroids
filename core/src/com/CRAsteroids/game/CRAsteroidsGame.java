@@ -2,8 +2,12 @@ package com.CRAsteroids.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class CRAsteroidsGame implements ApplicationListener {
@@ -15,6 +19,14 @@ public class CRAsteroidsGame implements ApplicationListener {
 	//Camera perpendicular to game plane
 	public static OrthographicCamera cam;
 	public static StretchViewport viewport;
+	
+	public static BitmapFont fontSmall;
+	public static BitmapFont fontMedium;
+	public static BitmapFont fontLarge;
+	
+	public static LabelStyle smallStyle;
+	public static LabelStyle mediumStyle;
+	public static LabelStyle largeStyle;
 	
 	private GameStateManager gsm;
 
@@ -34,6 +46,20 @@ public class CRAsteroidsGame implements ApplicationListener {
 		
 		//sets input processor to this
 		Gdx.input.setInputProcessor(new GameInputProcessor());
+		
+		//Generate font
+		SmartFontGenerator fontGen = new SmartFontGenerator();
+		FileHandle exoFile = Gdx.files.internal("fonts/Hyperspace Bold.ttf");
+		fontSmall = fontGen.createFont(exoFile, "exo-small", 20);
+		fontMedium = fontGen.createFont(exoFile, "exo-medium", 25);
+		fontLarge = fontGen.createFont(exoFile, "exo-large", 30);
+
+		smallStyle = new Label.LabelStyle();
+		smallStyle.font = fontSmall;
+		mediumStyle = new Label.LabelStyle();
+		mediumStyle.font = fontMedium;
+		largeStyle = new Label.LabelStyle();
+		largeStyle.font = fontLarge;
 		
 //		Jukebox.load("sounds/explode.ogg", "explode");
 //		Jukebox.load("sounds/extralife.ogg", "extralife");

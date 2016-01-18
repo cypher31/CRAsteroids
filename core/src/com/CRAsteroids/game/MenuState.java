@@ -3,7 +3,6 @@ package com.CRAsteroids.game;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -34,7 +33,7 @@ public class MenuState extends GameState{
 	//Stage
 	private Stage stage;
 	//Font
-	private BitmapFont titleFont;
+	//private BitmapFont titleFont;
 	private BitmapFont font;
 	private BitmapFont optionStyle;
 	private LabelStyle titleStyle;
@@ -93,29 +92,30 @@ public class MenuState extends GameState{
 //		System.out.println(titleFont.getBounds(title).width);
 //		titleFont.setColor(255, 255, 255, 1);
 		
-		SmartFontGenerator fontGen = new SmartFontGenerator();
-		FileHandle exoFile = Gdx.files.internal("fonts/Hyperspace Bold.ttf");
-		BitmapFont fontSmall = fontGen.createFont(exoFile, "exo-small", 20);
-		BitmapFont fontMedium = fontGen.createFont(exoFile, "exo-medium", 25);
-		BitmapFont fontLarge = fontGen.createFont(exoFile, "exo-large", 30);
-
+		//Generate font
+//		SmartFontGenerator fontGen = new SmartFontGenerator();
+//		FileHandle exoFile = Gdx.files.internal("fonts/Hyperspace Bold.ttf");
+//		BitmapFont fontSmall = fontGen.createFont(exoFile, "exo-small", 20);
+//		BitmapFont fontMedium = fontGen.createFont(exoFile, "exo-medium", 25);
+//		BitmapFont fontLarge = fontGen.createFont(exoFile, "exo-large", 30);
+//
+//		Label.LabelStyle smallStyle = new Label.LabelStyle();
+//		smallStyle.font = fontSmall;
+//		Label.LabelStyle mediumStyle = new Label.LabelStyle();
+//		mediumStyle.font = fontMedium;
+//		Label.LabelStyle largeStyle = new Label.LabelStyle();
+//		largeStyle.font = fontLarge;
+		
 		menuViewport = new FitViewport(CRAsteroidsGame.WIDTH, CRAsteroidsGame.HEIGHT);
 		stage = new Stage(menuViewport);
 		Gdx.input.setInputProcessor(stage);
 
-		Label.LabelStyle smallStyle = new Label.LabelStyle();
-		smallStyle.font = fontSmall;
-		Label.LabelStyle mediumStyle = new Label.LabelStyle();
-		mediumStyle.font = fontMedium;
-		Label.LabelStyle largeStyle = new Label.LabelStyle();
-		largeStyle.font = fontLarge;
-
 		if(currentScreenWidth <=800){
-			titleStyle = smallStyle;
+			titleStyle = CRAsteroidsGame.smallStyle;
 		}else if(currentScreenWidth >=800 && currentScreenWidth <= 1600){
-			titleStyle = mediumStyle;
+			titleStyle = CRAsteroidsGame.mediumStyle;
 		}else{
-			titleStyle = largeStyle;
+			titleStyle = CRAsteroidsGame.largeStyle;
 		}
 		
 		Label titleName = new Label(title, titleStyle);
@@ -125,9 +125,9 @@ public class MenuState extends GameState{
 
 		//buttons
 		if(currentScreenWidth <=800){
-			optionStyle = smallStyle.font;
+			optionStyle = CRAsteroidsGame.smallStyle.font;
 		}else{
-			optionStyle = mediumStyle.font;
+			optionStyle = CRAsteroidsGame.mediumStyle.font;
 		}
 		
 		textButtonStyle = new TextButtonStyle();
