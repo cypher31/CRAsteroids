@@ -2,19 +2,25 @@ package com.CRAsteroids.game;
 
 import java.util.ArrayList;
 
+import sun.font.GlyphLayout;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter.Particle;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 
-public class PlayState extends GameState {
+public class PlayState extends GameState implements InputProcessor{
 	
 	private SpriteBatch sb;
 	private ShapeRenderer sr;
+	
+	private OrthographicCamera cam;
 	
 	private BitmapFont font;
 	private Player hudPlayer;
@@ -39,6 +45,10 @@ public class PlayState extends GameState {
 	private float currentDelay;
 	private float bgTimer;
 	private boolean playLowPulse;
+	
+	private boolean leftPressed;
+	private boolean rightPressed;
+	private boolean upPressed;
 
 	protected PlayState(GameStateManager gsm) {
 		super(gsm);
@@ -50,13 +60,19 @@ public class PlayState extends GameState {
 		sb = new SpriteBatch();
 		sr = new ShapeRenderer();
 		
-		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace bold.ttf"));
-		FreeTypeFontParameter genPar = new FreeTypeFontParameter();
+		cam = new OrthographicCamera();
+		cam.position.set(0, 0, 0);
+		cam.update();
 		
-		genPar.size = 20;
+//		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace bold.ttf"));
+//		FreeTypeFontParameter genPar = new FreeTypeFontParameter();
+//		
+//		genPar.size = 20;
+//		
+//		BitmapFont font = gen.generateFont(genPar);
+//		gen.dispose();
 		
-		BitmapFont font = gen.generateFont(genPar);
-		gen.dispose();
+		font = CRAsteroidsGame.fontSmall;
 		
 		bullets = new ArrayList<Bullet>();
 		
@@ -74,6 +90,8 @@ public class PlayState extends GameState {
 		fsTimer = 0;
 		fsTime = 15;
 		enemyBullets = new ArrayList<Bullet>();
+		
+		Gdx.input.setInputProcessor(this);
 		
 		//Set up bg music
 		maxDelay = 1;
@@ -136,6 +154,9 @@ public class PlayState extends GameState {
 	public void update(float dt) {
 		handleInput();
 		
+		if(player != null)
+		cam.update();
+		
 		//next level
 		if(asteroids.size() == 0){
 			level++;
@@ -145,8 +166,8 @@ public class PlayState extends GameState {
 		//update player
 		player.update(dt);
 		if(player.isDead()){
-			if(player.getLives() == 0){
-				Jukebox.stopAll();
+			if(player.getLives() == 0) {
+//				Jukebox.stopAll();
 				Save.gd.setTentativeScore(player.getScore());
 				gsm.setState(GameStateManager.GAMEOVER);
 				return;
@@ -154,8 +175,8 @@ public class PlayState extends GameState {
 			player.reset();
 			player.loseLife();
 			flyingSaucer = null;
-			Jukebox.stop("smallsaucer");
-			Jukebox.stop("largesaucer");
+//			Jukebox.stop("smallsaucer");
+//			Jukebox.stop("largesaucer");
 			return;
 		}
 		//update player bullets
@@ -184,10 +205,10 @@ public class PlayState extends GameState {
 		//if already a suacer
 		else{
 			flyingSaucer.update(dt);
-			if(flyingSaucer.shoudlRemove()){
+			if(flyingSaucer.shouldRemove()){
 				flyingSaucer = null;
-				Jukebox.stop("smallsaucer");
-				Jukebox.stop("largesaucer");
+//				Jukebox.stop("smallsaucer");
+//				Jukebox.stop("largesaucer");
 			}
 		}
 		
@@ -195,8 +216,8 @@ public class PlayState extends GameState {
 		for(int i = 0; i < enemyBullets.size(); i++){
 			enemyBullets.get(i).update(dt);
 			if(enemyBullets.get(i).shouldRemove()){
-				enemybullets.remove(i);
-				i++
+				enemyBullets.remove(i);
+				i++;
 			}
 		}
 		
@@ -283,14 +304,15 @@ public class PlayState extends GameState {
 		}
 		
 		//bullet-flying saucer collision
-		if(flyignSaucer != null){
+		if(flyingSaucer != null){
 			for(int i = 0; i < bullets.size(); i++){
 				Bullet b = bullets.get(i);
-				if(flyingSaucer.contains(b.getx(), bgety())){
+				if(flyingSaucer.contains(b.getx(), b.gety())){
 					bullets.remove(i);
 					i--;
 					createParticles(flyingSaucer.getx(), flyingSaucer.gety());
 					player.incrementScore(flyingSaucer.getScore());
+					flyingSaucer = null;
 //					Jukebox.stop("smallsaucer");
 //					Jukebox.stop("largesaucer");
 //					Jukebox.play("explode")
@@ -307,7 +329,7 @@ public class PlayState extends GameState {
 					player.hit();
 					enemyBullets.remove(i);
 					i--;
-					Jukebox.play("explode");
+//					Jukebox.play("explode");
 					break;
 				}
 			}
@@ -344,7 +366,7 @@ public class PlayState extends GameState {
 					enemyBullets.remove(i);
 					i--;
 					createParticles(a.getx(), a.gety());
-					Jukebox.play("explode");
+//					Jukebox.play("explode");
 					break;
 				}
 			}
@@ -353,25 +375,178 @@ public class PlayState extends GameState {
 
 	@Override
 	public void draw() {
-		// TODO Auto-generated method stub
-
+		sb.setProjectionMatrix(CRAsteroidsGame.cam.combined);
+		sr.setProjectionMatrix(CRAsteroidsGame.cam.combined);
+		
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		//draw player
+		player.draw(sr);
+		
+		//draw bullets
+		for(int i = 0; i < bullets.size(); i++){
+			bullets.get(i).draw(sr);
+		}
+		
+		//draw flying saucer
+		if(flyingSaucer != null){
+			flyingSaucer.draw(sr);
+		}
+		
+		//draw fs bullets
+		for(int i = 0; i < enemyBullets.size(); i++){
+			enemyBullets.get(i).draw(sr);
+		}
+		
+		//draw asteroids
+		for(int i = 0; i < asteroids.size(); i++){
+			asteroids.get(i).draw(sr);
+		}
+		
+		//draw particles
+		for(int i = 0; i < particles.size(); i++){
+			particles.get(i).draw(sr);
+		}
+		
+		//draw score
+		sb.setColor(1, 1, 1, 1);
+		sb.begin();
+		String playerScore = Long.toString(player.getScore());
+		TextBounds playerScoreBounds = font.getBounds(playerScore);
+		font.draw(
+				sb, 
+				playerScore, 
+				(Gdx.graphics.getWidth() / 2) - (playerScoreBounds.width / 2),
+				Gdx.graphics.getHeight() * .95f);
+		sb.end();
+		
+		//draw lives
+		for(int i = 0; i < player.getLives(); i++){
+			hudPlayer.setPosition(
+					(Gdx.graphics.getWidth() / 2 - (player.playerWidth + player.playerWidth / 2)) + (player.playerWidth + player.playerWidth / 2) * i, 
+					Gdx.graphics.getHeight() * .90f);
+			hudPlayer.draw(sr);
+		}
 	}
 
-	@Override
 	public void handleInput() {
-		// TODO Auto-generated method stub
-
+//		if(!player.isHit()) {
+//			player.setLeft(GameKeys.isDown(GameKeys.LEFT));
+//			player.setRight(GameKeys.isDown(GameKeys.RIGHT));
+//			player.setUp(GameKeys.isDown(GameKeys.UP));
+//			if(GameKeys.isPressed(GameKeys.SPACE)) {
+//				player.shoot();
+//			}
+//		}
 	}
 
-	@Override
 	public void dispose() {
-		font.dispose();
+		sb.dispose();
+		sr.dispose();
+//		font.dispose();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public boolean keyDown(int k) {
+		if(k == Keys.UP) {
+			if(!player.isHit())
+			player.setUp(true);
+		}
+		if(k == Keys.LEFT) {
+			if(!player.isHit())
+			player.setLeft(true);
+		}
+		if(k == Keys.DOWN) {
+			GameKeys.setKey(GameKeys.DOWN, true);
+		}
+		if(k == Keys.RIGHT) {
+			if(!player.isHit())
+			player.setRight(true);
+		}
+		if(k == Keys.ENTER) {
+			GameKeys.setKey(GameKeys.ENTER, true);
+		}
+		if(k == Keys.ESCAPE) {
+			GameKeys.setKey(GameKeys.ESCAPE, true);
+		}
+		if(k == Keys.SPACE) {
+			if(!player.isHit())
+			player.shoot();
+		}
+		if(k == Keys.SHIFT_LEFT || k == Keys.SHIFT_RIGHT) {
+			GameKeys.setKey(GameKeys.SHIFT, true);
+		}
+		return true;
+	}
+	
+	public boolean keyUp(int k) {
+		if(k == Keys.UP) {
+			player.setUp(false);
+		}
+		if(k == Keys.LEFT) {
+			player.setLeft(false);
+		}
+		if(k == Keys.DOWN) {
+			GameKeys.setKey(GameKeys.DOWN, false);
+		}
+		if(k == Keys.RIGHT) {
+			player.setRight(false);
+		}
+		if(k == Keys.ENTER) {
+			GameKeys.setKey(GameKeys.ENTER, false);
+		}
+		if(k == Keys.ESCAPE) {
+			GameKeys.setKey(GameKeys.ESCAPE, false);
+		}
+		if(k == Keys.SPACE) {
+		}
+		if(k == Keys.SHIFT_LEFT || k == Keys.SHIFT_RIGHT) {
+			GameKeys.setKey(GameKeys.SHIFT, false);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

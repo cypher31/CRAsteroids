@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -16,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -98,14 +102,18 @@ public class MenuState extends GameState{
 		stage.addActor(titleTable);
 		stage.addActor(optionsTable);
 		
-			//title 
+		//title 
 		titleTable.align(Align.top).padTop(currentScreenHeight * 0.1f);
 		titleTable.add(titleName).top();
 
-			//buttons
+		//buttons
 		optionsTable.add(playButton).align(Align.center).row();
 		optionsTable.add(highScoreButton).align(Align.center).row();
 		optionsTable.add(quitButton).align(Align.center).row();
+		
+		playButton.setTouchable(Touchable.enabled);
+		highScoreButton.setTouchable(Touchable.enabled);
+		quitButton.setTouchable(Touchable.enabled);
 		
 		//Debug
 		titleTable.setDebug(true);
@@ -120,6 +128,8 @@ public class MenuState extends GameState{
 			asteroids.add(new Asteroid(MathUtils.random(CRAsteroidsGame.WIDTH), 
 					MathUtils.random(CRAsteroidsGame.HEIGHT), Asteroid.LARGE));
 		}
+		
+		Save.load();
 		
 	}
 
@@ -157,7 +167,7 @@ public class MenuState extends GameState{
 	@Override
 	public void handleInput() {
 		
-		//button click
+		//play button click
 		playButton.addListener(new ChangeListener(){
 		@Override
 		public void changed(ChangeEvent event, Actor actor){
@@ -166,6 +176,17 @@ public class MenuState extends GameState{
 		}
 		});
 		
+		//play button touch 
+		playButton.addListener(new InputListener(){
+		@Override
+		public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+			gsm.setState(GameStateManager.PLAY);
+			return true;
+		}
+		
+		});
+		
+		//highscore button click
 		highScoreButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor){
@@ -174,19 +195,41 @@ public class MenuState extends GameState{
 			}
 			});
 		
+		//highscore button touch 
+		highScoreButton.addListener(new InputListener(){
+		@Override
+		public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+			gsm.setState(GameStateManager.HIGHSCORE);
+			return true;
+		}
+		
+		});
+		
+		//quitbutton click
 		quitButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent event, Actor actor){
-				System.out.println("quit pressed");
 				Gdx.app.exit();
 			}
 			});
 		
+		//quit button touch 
+		quitButton.addListener(new InputListener(){
+		@Override
+		public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+			Gdx.app.exit();
+			return true;
+		}
+		
+		});
+		
 	}
-
+	
 	@Override
 	public void dispose() {
 		sr.dispose();
+		sb.dispose();
+		stage.dispose();
 //		titleFont.dispose();
 //		font.dispose();
 	}

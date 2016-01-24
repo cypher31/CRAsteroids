@@ -16,6 +16,8 @@ public class CRAsteroidsGame implements ApplicationListener {
 	public static int WIDTH;
 	public static int HEIGHT;
 	
+	Player player;
+	
 	//Camera perpendicular to game plane
 	public static OrthographicCamera cam;
 	public static StretchViewport viewport;
@@ -33,6 +35,7 @@ public class CRAsteroidsGame implements ApplicationListener {
 	public static LabelStyle largeStyle;
 	
 	private GameStateManager gsm;
+	private PlayState playState;
 
 	@Override
 	public void create() {
@@ -44,7 +47,7 @@ public class CRAsteroidsGame implements ApplicationListener {
 		//create camera
 		cam = new OrthographicCamera(WIDTH, HEIGHT);
 		//set camera position
-		cam.position.set(WIDTH / 2, HEIGHT /2, 0);
+		cam.position.set(WIDTH / 2, HEIGHT / 2, 0);
 		//updates camera
 		cam.update();
 		
@@ -97,13 +100,14 @@ public class CRAsteroidsGame implements ApplicationListener {
 				
 		//create camera
 		cam = new OrthographicCamera(WIDTH, HEIGHT);
-		//set camera position
-		cam.position.set(WIDTH / 2, HEIGHT /2, 0);
+		cam.position.set(WIDTH / 2, HEIGHT / 2, 0);
+		
 		//updates camera
 		cam.update();
 		
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.draw();
+		
 		GameKeys.update();
 	}
 	

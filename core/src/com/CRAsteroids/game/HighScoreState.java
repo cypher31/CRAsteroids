@@ -1,16 +1,15 @@
 package com.CRAsteroids.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
-public class HighScoreState extends GameState {
+public class HighScoreState extends GameState{
 	
 	private SpriteBatch sb;
+	
+	PlayState playState;
 	
 	private BitmapFont font;
 	
@@ -25,17 +24,6 @@ public class HighScoreState extends GameState {
 	public void init() {
 		
 		sb = new SpriteBatch();
-		
-//		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace bold.ttf"));
-//		FreeTypeFontParameter genPar = new FreeTypeFontParameter();
-//		
-//		genPar.size = 45;
-//		genPar.magFilter = TextureFilter.Linear;
-//		genPar.minFilter = TextureFilter.Linear;
-//		
-//		font = gen.generateFont(genPar);
-//		gen.dispose();
-		
 		font = CRAsteroidsGame.fontLarge;
 		
 		Save.load();
@@ -77,13 +65,6 @@ public class HighScoreState extends GameState {
 	}
 
 	@Override
-	public void handleInput() {
-		if(GameKeys.isPressed(GameKeys.ENTER) || GameKeys.isPressed(GameKeys.ESCAPE)){
-			gsm.setState(GameStateManager.MENU);
-		}
-	}
-
-	@Override
 	public void dispose() {
 		sb.dispose();
 //		font.dispose();
@@ -92,6 +73,14 @@ public class HighScoreState extends GameState {
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleInput() {
+		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)){
+			gsm.setState(GameStateManager.MENU);
+		}
 		
 	}
 
