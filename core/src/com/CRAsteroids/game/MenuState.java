@@ -44,7 +44,7 @@ public class MenuState extends GameState{
 	private TextButtonStyle textButtonStyle;
 	
 	//Text
-	private final String title = "Captain Rick Asteroids";
+	private final String title = "Asteroid Scavenger";
 	private final String play = "Play";
 	private final String highScore = "Highscore";
 	private final String quit = "Quit";
@@ -116,11 +116,11 @@ public class MenuState extends GameState{
 		quitButton.setTouchable(Touchable.enabled);
 		
 		//Debug
-		titleTable.setDebug(true);
-		optionsTable.setDebug(true);
-		playButton.setDebug(true);
-		highScoreButton.setDebug(true);
-		quitButton.setDebug(true);
+//		titleTable.setDebug(true);
+//		optionsTable.setDebug(true);
+//		playButton.setDebug(true);
+//		highScoreButton.setDebug(true);
+//		quitButton.setDebug(true);
 
 		//create asteroids
 		asteroids = new ArrayList<Asteroid>();
