@@ -1,5 +1,6 @@
 package com.CRAsteroids.game;
 
+
 public abstract class GameState {
 	
 	protected GameStateManager gsm;
